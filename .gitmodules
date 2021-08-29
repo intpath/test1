@@ -2,3 +2,8 @@
 	path = intpath/account_customisations
 	url = git@github.com:intpath/account_customisations.git
 	branch = master
+
+[submodule "intpath/add_account_receive_invoice"]
+	path = intpath/add_account_receive_invoice
+	url = git@github.com:intpath/add_account_receive_invoice.git
+	branch = master
