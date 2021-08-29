@@ -1,8 +1,0 @@
-<odoo>                                
-  <data>                                    
-    <record id="action_products_quant" model="ir.actions.client">                                        
-      <field name="name">POS Products Quantity</field>                                        
-      <field name="tag">product_quant.get_quant</field>                                    
-    </record>                                    
-  </data>                            
-</odoo>
