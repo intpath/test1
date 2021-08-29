@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record id="view_account_journal_form_inhers" model="ir.ui.view">
+            <field name="name">account.journal.form.view.inher</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="journal_user" attrs="{'invisible': [('type', 'not in', ('bank','cash'))]}"/> 
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_journal_tree_inhert" model="ir.ui.view">
+            <field name="name">account.journal.tree.view.inher</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="journal_user"/> 
+                </xpath>
+            </field>
+        </record>
+
+         <record id="view_account_payment_form_inher" model="ir.ui.view">
+            <field name="name">account.payment.form.view</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='post']" position="attributes">
+                    <attribute name="states"></attribute>
+                    <attribute name="attrs">{'invisible': ['|', ('state', '!=', 'draft'), ('payment_type', '=', 'transfer')]}</attribute>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                    <button name="button_sent" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('payment_type', '!=', 'transfer')]}" string="Send" type="object" class="oe_highlight"/>
+                    <button name="button_receive" attrs="{'invisible': ['|', ('state', '!=', 'send'), ('payment_type', '!=', 'transfer')]}" string="Receive" type="object" class="oe_highlight"/>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="statusbar_visible">draft,send,posted,reconciled,cancelled</attribute>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

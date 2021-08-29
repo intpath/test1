@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="group_location_manager_it" model="res.groups">
+            <field name="name">Location Manager</field>
+        </record>
+
+    </data>
+</odoo>

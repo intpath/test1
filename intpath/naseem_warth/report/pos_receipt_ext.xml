@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+   <t t-extend="OrderReceipt">
+       <t t-jquery=".pos-receipt .pos-receipt-contact" t-operation='append'>
+
+           <t t-if='receipt.client'>
+               <div style="font-weight:bold;">Customer: <t t-esc='receipt.client'/></div>
+           </t>
+
+           <t t-if='widget.pos.get_client() and widget.pos.get_client().phone'>
+               <div style="font-weight:bold;">Phone: <t t-esc='widget.pos.get_client().phone'/></div>
+           </t>
+
+	   <t t-if='widget.pos.get_client() and widget.pos.get_client().street'>
+               <div style="font-weight:bold;">Street: <t t-esc='widget.pos.get_client().street'/></div>
+           </t>
+
+       </t>
+   </t>
+</templates>

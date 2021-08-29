@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+      <template id="custom_sale_order" name="template_name" inherit_id="account.report_invoice_document">
+        <xpath expr="//t[@t-set='address']" position="inside">
+          <span align="left" t-field='o.partner_id.property_account_receivable_id'/> 
+        </xpath>
+        <xpath expr="//div[@id='informations']" position="inside">
+          <div class="col-auto mw-100 mb-2" t-if="o.invoice_line_ids[0] and o.invoice_payment_state == 'not_paid'" name="invoice_line_id">
+            <strong>Journal:</strong>
+            <p class="m-0" t-esc="str(o.invoice_line_ids[0].account_id.code) + ' ' + str(o.invoice_line_ids[0].account_id.name)"/>
+          </div>
+          <div class="col-auto mw-100 mb-2" t-if="(o.invoice_payment_state == 'in_payment' or o.invoice_payment_state == 'paid')" name="invoice_line_id">
+            <strong>Journal:</strong>
+            <p class="m-0" t-esc='o.get_payment_journal(o.invoice_payments_widget)'/>
+          </div>
+        </xpath>
+      </template>
+    </data>
+</odoo>

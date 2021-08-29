@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="invoice_summary_report.invoice_summary_report">
+            <t t-call="web.html_container">
+                <!-- <t t-foreach="docs" t-as="o"> -->
+                    <t t-call="web.external_layout">
+                        <!-- <t t-foreach="docs" t-as="doc"> -->
+                            <div class="page" style="font-size:12px;">
+                                <div class="row" style="border:1px solid black;;margin-bottom:10px;padding:10px;">
+                                    <div class="col-12 text-center" style="font-size:18px;">
+                                        <h4>Invoices Summary</h4>
+                                    </div>
+                                </div>
+                                 <t t-set="total" t-value="0"/>
+                                <t t-foreach="docs" t-as="doc" t-set="total" t-value="total + doc.amount_total"/>  
+                                <div class="row" style="border:1px solid black;;margin-bottom:10px;padding:10px;">
+                                    <div class="col-3" style="font-size:18px;">
+                                        <div >Date : <t t-esc="datetime.datetime.today().strftime('%d//%m//%Y')"/> </div>
+                                        <div >Time : <t t-esc="datetime.datetime.now().strftime('%H:%M:%S')"/> </div>
+                                        <div >User : <t t-esc="docs[0].env.user.partner_id.name"/> </div>
+                                        <div >Total : <t t-esc="total"/></div>
+                                       
+                                    </div>
+                                </div>
+                                <div class="row" style="border:1px solid black;;margin-bottom:10px;padding:10px;">
+                                    <div class="col-12 text-center" style="font-size:18px;">
+                                        <h4>Invoices</h4>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <table  class="table table-sm o_main_table" style="border:1px solid black;font-size:14px;">
+                                        <thead>
+                                            <tr>
+                                                <th style="text-align:center;border:1px solid black;"  name="th_invoice"> Invoice</th>
+                                                <th style="text-align:center;border:1px solid black;"  name="th_customer">Customer</th>
+                                                <th style="text-align:center;border:1px solid black;"  name="th_date">Invoice Date</th>
+                                                <th style="text-align:center;border:1px solid black;"  name="th_total">Total Amount</th>
+                                                <th style="text-align:center;border:1px solid black;"  name="th_status">Status</th>
+                                                 <th style="text-align:center;border:1px solid black;"  name="th_status">Products</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="docs" t-as="o">
+                                                <tr>
+                                                    <td style="text-align:center;border:1px solid black;" name="td_invoice">
+                                                        <p  t-field="o.name"/>
+                                                    </td>
+                                                    <td style="text-align:center;border:1px solid black;" name="td_customer">
+                                                        <p  t-field="o.partner_id.name"/>
+                                                    </td>
+                                                    <td style="text-align:center;border:1px solid black;" name="td_date">
+                                                        <p  t-field="o.invoice_date"/>
+                                                    </td>
+                                                    <td style="text-align:center;border:1px solid black;" name="td_total">
+                                                        <p  t-field="o.amount_total"/>
+                                                    </td>
+                                                    <td style="text-align:center;border:1px solid black;" name="td_status">
+                                                        <p  t-field="o.state"/>
+                                                    </td>
+                                                    <td style="text-align:center;border:1px solid black;" name="td_products">
+                                                         <table>
+                                                            <tbody>
+                                                                <tr style="background-color:#e5d5c1;">
+                                                                    <td style="border:1px solid black;" name="th_product">product</td>
+                                                                    <td style="border:1px solid black;" name="th_price">price</td>
+                                                                    <td style="border:1px solid black;" name="th_qty">qty</td>
+                                                                    <td style="border:1px solid black;" name="th_total">total</td>
+                                                                </tr>
+                                                                <t t-foreach="o.invoice_line_ids" t-as="line">
+                                                                    <tr style="">
+                                                                        <td style="border:1px solid black;"><span t-field="line.product_id"/></td>
+                                                                        <td style="border:1px solid black;"><span t-field="line.quantity"/></td>
+                                                                        <td style="border:1px solid black;"><span t-field="line.price_unit"/></td>
+                                                                        <td style="border:1px solid black;"><span t-field="line.price_subtotal"/></td>
+                                                                    </tr>
+                                                                    
+                                                                </t>
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                         </tbody>
+                                    </table>
+
+                                </div>
+                                
+
+                                
+
+                            </div>
+                                
+                        <!-- </t> -->
+                    </t>
+                <!-- </t>         -->
+            </t>
+         </template>
+
+
+        
+
+        <report id="invoice_summary"
+                string="Inovice Summary"
+                model="account.move"
+                report_type="qweb-pdf"
+                name="invoice_summary_report.invoice_summary_report"
+                file="invoice_summary_report.invoice_summary_report"
+                print_report_name="'Invoice Summary'"
+                />
+
+
+    </data>
+</odoo>

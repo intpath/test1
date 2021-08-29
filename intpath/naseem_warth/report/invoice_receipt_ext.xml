@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- <template id="nw_invoice_ext" inherit_id="account.report_invoice_document" > -->
+<!--    inherts the account = module name , report_invoice_document=id of the report   -->
+    <template id="nw_invoice_ext" inherit_id="account.report_invoice_document" >
+      <xpath expr="//div[@name='reference']" position="after">
+        <!-- how to incert the content by using xpath -->
+        <div t-if="o.from_location_id" class="col‐auto mw‐100 mr-3 mb‐2">
+          <strong>Location:</strong>
+          <p class="m‐0" t-field="o.from_location_id"></p>
+        </div>
+        <div t-if="o.journal_type" class="col‐auto mw‐100 mb‐2">
+          <strong>Journal:</strong>
+          <p class="m‐0" t-field="o.journal_type"></p>
+        </div>
+      </xpath>
+    </template>
+  </data>
+</odoo>

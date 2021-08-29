@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+         <record id="view_account_journal_form_inhers" model="ir.ui.view">
+            <field name="name">account.journal.form.view.inher</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="journal_user" attrs="{'invisible': [('type', 'not in', ('bank','cash'))]}"/> 
+                </xpath>
+            </field>
+        </record>
+
+        <record id="view_account_journal_tree_inhert" model="ir.ui.view">
+            <field name="name">account.journal.tree.view.inher</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.view_account_journal_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='type']" position="after">
+                    <field name="journal_user"/> 
+                </xpath>
+            </field>
+        </record>
+
+         <record id="view_account_payment_form_inher" model="ir.ui.view">
+            <field name="name">account.payment.form.view</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='post']" position="attributes">
+                    <attribute name="states"></attribute>
+                    <attribute name="attrs">{'invisible': ['|', ('state', '!=', 'draft'), ('payment_type', '=', 'transfer')]}</attribute>
+                </xpath>
+                <xpath expr="//header" position="inside">
+                    <button name="button_sent" attrs="{'invisible': ['|', ('state', '!=', 'draft'), ('payment_type', '!=', 'transfer')]}" string="Send" type="object" class="oe_highlight"/>
+                    <button name="button_receive" attrs="{'invisible': ['|', ('state', '!=', 'send'), ('payment_type', '!=', 'transfer')]}" string="Receive" type="object" class="oe_highlight"/>
+                </xpath>
+                <xpath expr="//field[@name='state']" position="attributes">
+                    <attribute name="statusbar_visible">draft,send,posted,reconciled,cancelled</attribute>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- TODO place it and show it -->
+        <record id="account_journal_dashboard_kanban_view_inh" model="ir.ui.view">
+            <field name="name">account.journal.dashboard.kanban</field>
+            <field name="model">account.journal</field>
+            <field name="inherit_id" ref="account.account_journal_dashboard_kanban_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='activity_state']" position="inside">
+                    <field name="count_payment_sent_cash" />
+                    <field name="count_payment_receive_cash" />
+                    <field name="count_payment_sent_bank" />
+                    <field name="count_payment_receive_bank" />
+                </xpath>
+                <xpath expr="//t[@t-name='JournalBodyBankCash']/div[hasclass('o_kanban_primary_right')]" position="inside">
+                     <t t-if="journal_type == 'cash'">
+                        <t t-if="record.count_payment_sent_cash.raw_value &gt; 0">
+                            <div class="row">
+                                <div class="col-7 text-left">
+                                    <a name="get_action_picking_tree_to_send_cash" type="object">
+                                        To Send
+                                    </a>
+                                </div>
+                                <div class="col-5 text-right">
+                                    <field name="count_payment_sent_cash"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="record.count_payment_receive_cash.raw_value &gt; 0">
+                            <div class="row">
+                                <div class="col-7 text-left">
+                                    <a name="get_action_picking_tree_to_receive_cash" type="object">
+                                        To Receive
+                                    </a>
+                                </div>
+                                <div class="col-5 text-right">
+                                    <field name="count_payment_receive_cash"/>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                    <t t-if="journal_type == 'bank'">
+                        <t t-if="record.count_payment_sent_bank.raw_value &gt; 0">
+                            <div class="row">
+                                <div class="col-7 text-left">
+                                    <a name="get_action_picking_tree_to_send_bank" type="object">
+                                        To Send
+                                    </a>
+                                </div>
+                                <div class="col-5 text-right">
+                                    <field name="count_payment_sent_bank"/>
+                                </div>
+                            </div>
+                        </t>
+                        <t t-if="record.count_payment_receive_bank.raw_value &gt; 0">
+                            <div class="row">
+                                <div class="col-7 text-left">
+                                    <a name="get_action_picking_tree_to_receive_bank" type="object">
+                                        To Receive
+                                    </a>
+                                </div>
+                                <div class="col-5 text-right">
+                                    <field name="count_payment_receive_bank"/>
+                                </div>
+                            </div>
+                        </t>
+                    </t>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="action_payment_tree_sent_custom_cash" model="ir.actions.act_window">
+            <field name="name">Sent Transfers</field>
+            <field name="res_model">account.payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[('state', '=', 'draft'), ('payment_type', '=', 'transfer'), ('journal_id.type', '=', 'cash')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new transfer
+                </p>
+            </field>
+        </record>
+
+        <record id="action_payment_tree_receive_custom_cash" model="ir.actions.act_window">
+            <field name="name">Receive Transfers</field>
+            <field name="res_model">account.payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[('state', '=', 'send'), ('payment_type', '=', 'transfer'), ('destination_journal_id.type', '=', 'cash')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new transfer
+                </p>
+            </field>
+        </record>
+
+        <record id="action_payment_tree_sent_custom_bank" model="ir.actions.act_window">
+            <field name="name">Sent Transfers</field>
+            <field name="res_model">account.payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[('state', '=', 'draft'), ('payment_type', '=', 'transfer'), ('journal_id.type', '=', 'bank')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new transfer
+                </p>
+            </field>
+        </record>
+
+        <record id="action_payment_tree_receive_custom_bank" model="ir.actions.act_window">
+            <field name="name">Receive Transfers</field>
+            <field name="res_model">account.payment</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <field name="domain">[('state', '=', 'send'), ('payment_type', '=', 'transfer'), ('destination_journal_id.type', '=', 'bank')]</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new transfer
+                </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

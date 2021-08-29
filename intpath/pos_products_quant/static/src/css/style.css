@@ -1,0 +1,21 @@
+.product-img{
+    position: relative;
+}
+
+.pos_products_quant-quant_widget{
+    position: absolute;
+    top:5px;
+    left: 5px;
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    background-color: #7f82ac;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pos_products_quant-quant_widget > span{
+    display: flex;
+    color: white;
+}

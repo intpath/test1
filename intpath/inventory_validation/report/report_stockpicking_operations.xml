@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="report_picking_inherit" inherit_id="stock.report_picking">
+            <xpath expr="//div[@name='div_state']" position="after">
+                <div t-if="o.get_invoice_list()" class="col-auto" name="div_invoices">
+                    <strong>Invoices:</strong>
+                    <p t-esc="o.get_invoice_list()"/>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>
