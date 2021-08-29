@@ -1,0 +1,4 @@
+[submodule "intpath/warehouse-restriction"]
+	path = intpath/warehouse-restriction
+	url = git@github.com:intpath/warehouse-restriction.git
+	branch = master
