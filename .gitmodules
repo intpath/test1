@@ -1,0 +1,4 @@
+[submodule "intpath/account_customisations"]
+	path = intpath/account_customisations
+	url = git@github.com:intpath/account_customisations.git
+	branch = master
