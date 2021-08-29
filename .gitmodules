@@ -7,3 +7,8 @@
 	path = intpath/add_account_receive_invoice
 	url = git@github.com:intpath/add_account_receive_invoice.git
 	branch = master
+
+[submodule "intpath/deltatech_stock_negative"]
+	path = intpath/deltatech_stock_negative
+	url = git@github.com:intpath/deltatech_stock_negative.git
+	branch = master
